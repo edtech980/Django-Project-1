@@ -1,0 +1,52 @@
+{% extends "main/base.html" %}
+
+{% block title %} 
+    Home Page
+{% endblock %}
+
+{% block content %}
+    
+    <div class="nav_bar">
+        <h2 class="blog_title1">JS Tech Blog</h2>
+        <nav class="nav_items">
+            <div>
+                {% if user.is_authenticated %}
+                    <a href="/" class="nav_items">Home</a>
+                    <a href="/newpost" class="nav_items">New Post</a>
+                    <a href="/logout" class="nav_items">Logout</a>
+                {% else %}
+                    <a href="/login" class="nav_items">Login</a>
+                    <a href="/register" class="nav_items">Sign Up</a>
+                {% endif %}
+            </div>
+            
+        </nav>
+    </div>
+
+    
+    <div class="page_posts">
+
+        <form class="posts_form" method="post" action="#">
+            {% csrf_token %}
+            {% if user.is_authenticated %}
+                {% for post in user.bloggerlist.all %}
+                    <div class="blog_post">
+                        <h4 class="post_title" name="{{post.title}}">
+                            {{post.title}}
+                        </h4>
+                        <p class="post_text">
+                            {{post.text}}
+                        </p>
+                        <p class="post_date">
+                            Post Date: <span>{{post.time_post}}</span>
+                        </p>
+                        <button type="submit" class="btn btn-primary btn-md" name="{{post.id}}" value="{{post.id}}">Delete Post</button> 
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h1 class="login_href">Login <a href="/login">Here</a></h1>
+            {% endif %}
+        </form>    
+        
+    </div>
+{% endblock %}
